@@ -10,13 +10,18 @@ import java.util.Scanner;
 public class UtilityMethods {
     private static Scanner reader = new Scanner(System.in);
 
-    public static int inputInt(String errorMessage) {
+    public static int inputPosInt(String errorMessage) {
         int integer;
         while (true) {
             try {
                 String response = reader.nextLine();
                 integer = Integer.parseInt(response);
-                break;
+                if (integer > 0) {
+                    break;
+                }
+                else {
+                    System.out.println(errorMessage);
+                }
             } catch (NumberFormatException exception) {
                 System.out.println(errorMessage);
             }
@@ -50,7 +55,7 @@ public class UtilityMethods {
     public static int inputHigherValue (String something, int oldValue) {
         while (true) {
             System.out.println("Enter a higher " + something + ":");
-            int newValue = inputInt("Invalid number!");
+            int newValue = inputPosInt("Invalid number!");
             if (newValue > oldValue) {
                 return newValue;
             }

@@ -12,7 +12,7 @@ public class Game {
 
         //Creates an array of players objects named "players"
         System.out.println("How many players will be playing?");
-        players = new Player[UtilityMethods.inputInt("Invalid number!")];
+        players = new Player[UtilityMethods.inputPosInt("Invalid number!")];
         int firstPlayer = players.length - 1;
 
         //Creates player objects
@@ -30,10 +30,7 @@ public class Game {
                 player.rollDice();
 
                 System.out.print("Rolls: ");
-                for (int x = 0; x < player.getRolls().length - 1; x++) {
-                    System.out.print(player.getRolls()[x] + ", ");
-                }
-                System.out.print(player.getRolls()[player.getRolls().length - 1]);
+                printRolls(player);
 
                 System.out.println();
                 UtilityMethods.pause("continue");
@@ -42,11 +39,9 @@ public class Game {
             //turn 1
             System.out.println(players[firstPlayer].getName().toUpperCase() + "'S TURN");
             System.out.println("Bid a quantity and face value.\nQuantity: ");
-            int quantity = reader.nextInt();
-            reader.nextLine();
+            int quantity = UtilityMethods.inputPosInt("Invalid number!");
             System.out.println("Face Value: ");
-            int faceValue = reader.nextInt();
-            reader.nextLine();
+            int faceValue = UtilityMethods.inputPosInt("Invalid number!");
             System.out.println(players[firstPlayer].getName().toUpperCase() + " bid " + quantity + " " + faceValue + "'s.");
 
             //subsequent turns
@@ -63,12 +58,7 @@ public class Game {
                         //prints dice rolls for all players
                         for (Player player : players) {
                             System.out.print("\n" + player.getName() + "'s Rolls: ");
-                            for (int i = 1; i <= player.getNumberOfDice(); i++) {
-                                System.out.print(player.getRolls()[i - 1]);
-                                if (player.getNumberOfDice() - i >= 1) {
-                                    System.out.print(", ");
-                                }
-                            }
+                            printRolls(player);
                         }
 
                         //counts matching faces
@@ -133,7 +123,13 @@ public class Game {
                         }
                         break;
                     }
+
                 }
+            }
+        }
+        for (Player player : players) {
+            if (player.getNumberOfDice() > 0) {
+                System.out.print(player.getName() + " wins!");
             }
         }
     }
@@ -145,5 +141,13 @@ public class Game {
             }
         }
         return playersLeft != 1;
+    }
+    private static void printRolls(Player player) {
+        for (int i = 1; i <= player.getNumberOfDice(); i++) {
+            System.out.print(player.getRolls()[i - 1]);
+            if (player.getNumberOfDice() - i >= 1) {
+                System.out.print(", ");
+            }
+        }
     }
 }

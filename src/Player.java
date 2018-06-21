@@ -15,7 +15,12 @@ public class Player {
     private int [] rolls;
 
     public Player(String name) {
-        this.name = name;
+        if (name.equals("")) {
+            this.name = "???";
+        }
+        else {
+            this.name = name;
+        }
         rolls = new int[5];
         numberOfDice = 5;
         rollDice();
