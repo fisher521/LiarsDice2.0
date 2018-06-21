@@ -25,6 +25,9 @@ public class Game {
 
             //dice rolls
             for (Player player : players) {
+                if (player == null)
+                    continue;
+
                 System.out.println(player.getName() + ", press enter to roll the dice.");
                 reader.nextLine();
                 player.rollDice();
@@ -57,6 +60,9 @@ public class Game {
 
                         //prints dice rolls for all players
                         for (Player player : players) {
+                            if (player == null)
+                                continue;
+
                             System.out.print("\n" + player.getName() + "'s Rolls: ");
                             printRolls(player);
                         }
@@ -64,6 +70,9 @@ public class Game {
                         //counts matching faces
                         int matchingFaces = 0;
                         for (Player player : players) {
+                            if (player == null)
+                                continue;
+
                             for (int i = 0; i < player.getNumberOfDice(); i++) {
                                 if (player.getRoll(i) == faceValue) {
                                     matchingFaces++;
@@ -128,6 +137,9 @@ public class Game {
             }
         }
         for (Player player : players) {
+            if (player == null)
+                continue;
+
             if (player.getNumberOfDice() > 0) {
                 System.out.print(player.getName() + " wins!");
             }
@@ -135,8 +147,12 @@ public class Game {
     }
     private static boolean isGoing() {
         int playersLeft = players.length;
-        for (Player player : players) {
-            if (player.getNumberOfDice() == 0) {
+        for (int i = 0; i < players.length; ++i) {
+            if (players[i] == null)
+                continue;
+
+            if (players[i].getNumberOfDice() == 0) {
+                players[i] = null;
                 playersLeft--;
             }
         }
