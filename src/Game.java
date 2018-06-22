@@ -7,13 +7,17 @@ import java.util.Scanner;
  */
 public class Game {
     private static Player[] players;
+    private static int firstPlayer;
+    private static int currentPlayer;
+    private static int roundLoser;
     public static void main (String [] args) {
         Scanner reader = new Scanner(System.in);
 
         //Creates an array of players objects named "players"
         System.out.println("How many players will be playing?");
         players = new Player[UtilityMethods.inputPosInt("Invalid number!")];
-        int firstPlayer = players.length - 1;
+        int playersLeft = players.length;
+        firstPlayer = players.length - 1;
 
         //Creates player objects
         for (int i = 0; i < players.length; i++) {
@@ -21,7 +25,7 @@ public class Game {
             players[i] = new Player(reader.nextLine());
         }
 
-        while(isGoing()) {
+        while(playersLeft != 1) {
 
             //dice rolls
             for (Player player : players) {
@@ -49,7 +53,8 @@ public class Game {
 
             //subsequent turns
             boolean round = true;
-            int currentPlayer = 0;
+            currentPlayer = firstPlayer;
+            advanceCurrentPlayer();
             while (round) {
                 System.out.println("\n" + players[currentPlayer].getName().toUpperCase() + "'S TURN");
                 while (true) {
@@ -84,16 +89,22 @@ public class Game {
                         //penalizes loser and ends round
                         if (matchingFaces >= quantity) {
                             players[currentPlayer].loseDice();
-                            System.out.println(players[currentPlayer].getName() + " has lost a die and now has " + players[currentPlayer].getNumberOfDice() + " dice!");
+                            roundLoser = currentPlayer;
                         } else {
                             if (currentPlayer > 0) {
                                 players[currentPlayer - 1].loseDice();
+                                roundLoser = currentPlayer - 1;
                             } else {
                                 players[players.length - 1].loseDice();
+                                roundLoser = players.length - 1;
                             }
-                            System.out.println(players[players.length - 1].getName() + " has lost a die and now has " + players[players.length - 1].getNumberOfDice() + " dice!");
                         }
-
+                        System.out.println(players[roundLoser].getName() + " has lost a die and now has " + players[roundLoser].getNumberOfDice() + " dice!");
+                        if (players[roundLoser].getNumberOfDice() == 0) {
+                            players[roundLoser] = null;
+                            playersLeft--;
+                        }
+                        advanceFirstPlayer();
                         round = false;
                         System.out.println();
 
@@ -149,12 +160,7 @@ public class Game {
         int playersLeft = players.length;
         for (int i = 0; i < players.length; ++i) {
             if (players[i] == null)
-                continue;
-
-            if (players[i].getNumberOfDice() == 0) {
-                players[i] = null;
                 playersLeft--;
-            }
         }
         return playersLeft != 1;
     }
@@ -163,6 +169,34 @@ public class Game {
             System.out.print(player.getRolls()[i - 1]);
             if (player.getNumberOfDice() - i >= 1) {
                 System.out.print(", ");
+            }
+        }
+    }
+    private static void advanceFirstPlayer() {
+        firstPlayer = roundLoser;
+        while (true) {
+            if (players[firstPlayer] != null) {
+                break;
+            }
+            else {
+                if (firstPlayer < players.length - 1) {
+                    firstPlayer++;
+                }
+                else {
+                    firstPlayer = 0;
+                }
+            }
+        }
+    }
+    private static void advanceCurrentPlayer() {
+        while (true) {
+            if (currentPlayer < players.length - 1) {
+                currentPlayer++;
+            } else {
+                currentPlayer = 0;
+            }
+            if (players[currentPlayer] != null) {
+                break;
             }
         }
     }
