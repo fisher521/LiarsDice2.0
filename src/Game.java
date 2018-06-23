@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.*;
 /**
  * Liars Dice Game
  *
@@ -6,27 +6,30 @@ import java.util.Scanner;
  * @version 6/18/18
  */
 public class Game {
-    private static Player[] players;
+    private static ArrayList<Player> playerArrayList;
+    private static int firstPlayer;
+    private static int currentPlayer;
+    private static int roundLoser;
     public static void main (String [] args) {
         Scanner reader = new Scanner(System.in);
 
-        //Creates an array of players objects named "players"
+        //Creates an arrayList of Player objects
         System.out.println("How many players will be playing?");
-        players = new Player[UtilityMethods.inputPosInt("Invalid number!")];
-        int firstPlayer = players.length - 1;
+        int playerCount = UtilityMethods.inputPosInt("Invalid number!");
+        playerArrayList = new ArrayList<>(playerCount);
+        int playersLeft = playerCount;
+        firstPlayer = playerCount - 1;
 
-        //Creates player objects
-        for (int i = 0; i < players.length; i++) {
+        //Creates Player objects
+        for (int i = 0; i < playerCount; i++) {
             System.out.println("Player " + (i + 1) + ", what is your name? ");
-            players[i] = new Player(reader.nextLine());
+            playerArrayList.add(new Player(reader.nextLine()));
         }
 
-        while(isGoing()) {
+        while(playersLeft != 1) {
 
             //dice rolls
-            for (Player player : players) {
-                if (player == null)
-                    continue;
+            for (Player player : playerArrayList) {
 
                 System.out.println(player.getName() + ", press enter to roll the dice.");
                 reader.nextLine();
@@ -40,18 +43,19 @@ public class Game {
             }
 
             //turn 1
-            System.out.println(players[firstPlayer].getName().toUpperCase() + "'S TURN");
+            System.out.println(playerArrayList.get(firstPlayer).getName().toUpperCase() + "'S TURN");
             System.out.println("Bid a quantity and face value.\nQuantity: ");
             int quantity = UtilityMethods.inputPosInt("Invalid number!");
             System.out.println("Face Value: ");
             int faceValue = UtilityMethods.inputPosInt("Invalid number!");
-            System.out.println(players[firstPlayer].getName().toUpperCase() + " bid " + quantity + " " + faceValue + "'s.");
+            System.out.println(playerArrayList.get(firstPlayer).getName().toUpperCase() + " bid " + quantity + " " + faceValue + "'s.");
 
             //subsequent turns
             boolean round = true;
-            int currentPlayer = 0;
+            currentPlayer = firstPlayer;
+            advanceCurrentPlayer();
             while (round) {
-                System.out.println("\n" + players[currentPlayer].getName().toUpperCase() + "'S TURN");
+                System.out.println("\n" + playerArrayList.get(currentPlayer).getName().toUpperCase() + "'S TURN");
                 while (true) {
                     System.out.println("Would you like to challenge or make a higher bid? (c/b)");
                     String decision = reader.nextLine();
@@ -59,9 +63,7 @@ public class Game {
                     if (decision.equals("c")) {
 
                         //prints dice rolls for all players
-                        for (Player player : players) {
-                            if (player == null)
-                                continue;
+                        for (Player player : playerArrayList) {
 
                             System.out.print("\n" + player.getName() + "'s Rolls: ");
                             printRolls(player);
@@ -69,9 +71,7 @@ public class Game {
 
                         //counts matching faces
                         int matchingFaces = 0;
-                        for (Player player : players) {
-                            if (player == null)
-                                continue;
+                        for (Player player : playerArrayList) {
 
                             for (int i = 0; i < player.getNumberOfDice(); i++) {
                                 if (player.getRoll(i) == faceValue) {
@@ -83,25 +83,31 @@ public class Game {
 
                         //penalizes loser and ends round
                         if (matchingFaces >= quantity) {
-                            players[currentPlayer].loseDice();
-                            System.out.println(players[currentPlayer].getName() + " has lost a die and now has " + players[currentPlayer].getNumberOfDice() + " dice!");
+                            playerArrayList.get(currentPlayer).loseDice();
+                            roundLoser = currentPlayer;
                         } else {
                             if (currentPlayer > 0) {
-                                players[currentPlayer - 1].loseDice();
+                                playerArrayList.get(currentPlayer - 1).loseDice();
+                                roundLoser = currentPlayer - 1;
                             } else {
-                                players[players.length - 1].loseDice();
+                                playerArrayList.get(playerArrayList.size() - 1).loseDice();
+                                roundLoser = playerArrayList.size() - 1;
                             }
-                            System.out.println(players[players.length - 1].getName() + " has lost a die and now has " + players[players.length - 1].getNumberOfDice() + " dice!");
                         }
-
+                        System.out.println(playerArrayList.get(roundLoser).getName() + " has lost a die and now has " + playerArrayList.get(roundLoser).getNumberOfDice() + " dice!");
+                        if (playerArrayList.get(roundLoser).getNumberOfDice() == 0) {
+                            playerArrayList.remove(roundLoser);
+                            playersLeft--;
+                        }
+                        advanceFirstPlayer();
                         round = false;
                         System.out.println();
 
-                        if (isGoing()) {
+                        if (playersLeft != 1) {
                             UtilityMethods.pause("begin new round");
                         }
 
-                        if (currentPlayer < players.length - 1) {
+                        if (currentPlayer < playerArrayList.size() - 1) {
                             currentPlayer++;
                         }
                         else {
@@ -122,9 +128,9 @@ public class Game {
                                 break;
                             }
                         }
-                        System.out.println(players[currentPlayer].getName() + " bid " + quantity + " " + faceValue + "'s.");
+                        System.out.println(playerArrayList.get(currentPlayer).getName() + " bid " + quantity + " " + faceValue + "'s.");
 
-                        if (currentPlayer < players.length - 1) {
+                        if (currentPlayer < playerArrayList.size() - 1) {
                             currentPlayer++;
                         }
                         else {
@@ -136,7 +142,7 @@ public class Game {
                 }
             }
         }
-        for (Player player : players) {
+        for (Player player : playerArrayList) {
             if (player == null)
                 continue;
 
@@ -145,24 +151,39 @@ public class Game {
             }
         }
     }
-    private static boolean isGoing() {
-        int playersLeft = players.length;
-        for (int i = 0; i < players.length; ++i) {
-            if (players[i] == null)
-                continue;
-
-            if (players[i].getNumberOfDice() == 0) {
-                players[i] = null;
-                playersLeft--;
-            }
-        }
-        return playersLeft != 1;
-    }
     private static void printRolls(Player player) {
         for (int i = 1; i <= player.getNumberOfDice(); i++) {
             System.out.print(player.getRolls()[i - 1]);
             if (player.getNumberOfDice() - i >= 1) {
                 System.out.print(", ");
+            }
+        }
+    }
+    private static void advanceFirstPlayer() {
+        firstPlayer = roundLoser;
+        while (true) {
+            if (playerArrayList.get(firstPlayer) != null) {
+                break;
+            }
+            else {
+                if (firstPlayer < playerArrayList.size() - 1) {
+                    firstPlayer++;
+                }
+                else {
+                    firstPlayer = 0;
+                }
+            }
+        }
+    }
+    private static void advanceCurrentPlayer() {
+        while (true) {
+            if (currentPlayer < playerArrayList.size() - 1) {
+                currentPlayer++;
+            } else {
+                currentPlayer = 0;
+            }
+            if (playerArrayList.get(currentPlayer) != null) {
+                break;
             }
         }
     }
