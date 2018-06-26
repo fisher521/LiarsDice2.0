@@ -7,12 +7,12 @@ import java.util.Scanner;
  * @version 6/19/18
  */
 public class Player {
-    private static Random generator = new Random();
+    protected static Random generator = new Random();
     private static Scanner reader = new Scanner(System.in);
 
-    private String name;
-    private int numberOfDice;
-    private int [] rolls;
+    protected String name;
+    protected int numberOfDice;
+    protected int [] rolls;
 
     public Player(String name) {
         if (name.equals("")) {
@@ -68,8 +68,37 @@ public class Player {
         }
     }
 
-    int challenge (int quantity, int faceValue) {
+    String turn() {
+        String decision;
 
+        System.out.println("\n" + name.toUpperCase() + "'S TURN");
+        while (true) {
+            System.out.println("Would you like to make a higher bid or challenge the current bid? (b/c)");
+            decision = reader.nextLine();
+
+            if (decision.equals("c")) {
+                return decision;
+            }
+            else if (decision.equals("b")) {
+
+            }
+        }
+    }
+    void bid () {
+        while (true) {
+            System.out.println("Would you like to enter a quantity or a face value? (q/f)");
+            String decision = reader.nextLine();
+
+            if (decision.equals("q")) {
+                Game.quantity = UtilityMethods.inputHigherValue("quantity", Game.quantity);
+                break;
+            } else if (decision.equals("f")) {
+                Game.faceValue = UtilityMethods.inputHigherValue("face value", Game.faceValue);
+                break;
+            }
+        }
+    }
+    int challenge () {
         //prints dice rolls for all players
         for (Player player : Game.playerArrayList) {
 
@@ -82,7 +111,7 @@ public class Player {
         for (Player player : Game.playerArrayList) {
 
             for (int i = 0; i < player.getNumberOfDice(); i++) {
-                if (player.getRoll(i) == faceValue) {
+                if (player.getRoll(i) == Game.faceValue) {
                     matchingFaces++;
                 }
             }
@@ -90,7 +119,7 @@ public class Player {
         System.out.println("\nMatching faces: " + matchingFaces);
 
         //returns index of the loser of the challenge
-        if (matchingFaces >= quantity) {
+        if (matchingFaces >= Game.quantity) {
             return Game.playerArrayList.indexOf(this);
         } else {
             if (Game.playerArrayList.indexOf(this) > 0) {

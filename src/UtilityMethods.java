@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class UtilityMethods {
     private static Scanner reader = new Scanner(System.in);
 
-    public static int inputPosInt(String errorMessage) {
+    public static int inputPosInt() {
         int integer;
         while (true) {
             try {
@@ -20,27 +20,31 @@ public class UtilityMethods {
                     break;
                 }
                 else {
-                    System.out.println(errorMessage);
+                    System.out.println("Invalid number!");
                 }
             } catch (NumberFormatException exception) {
-                System.out.println(errorMessage);
+                System.out.println("Invalid number!");
             }
         }
         return integer;
     }
-
-    public static double inputDouble(String errorMessage) {
-        double dub;
+    public static int inputBoundInt(int lowerBound, int upperBound) {
+        int integer;
         while (true) {
             try {
                 String response = reader.nextLine();
-                dub = Double.parseDouble(response);
-                break;
+                integer = Integer.parseInt(response);
+                if (integer >= lowerBound && integer <= upperBound) {
+                    break;
+                }
+                else {
+                    System.out.println("Invalid number!");
+                }
             } catch (NumberFormatException exception) {
-                System.out.println(errorMessage);
+                System.out.println("Invalid number!");
             }
         }
-        return dub;
+        return integer;
     }
 
     public static void pause(String reason) {
@@ -55,7 +59,7 @@ public class UtilityMethods {
     public static int inputHigherValue (String something, int oldValue) {
         while (true) {
             System.out.println("Enter a higher " + something + ":");
-            int newValue = inputPosInt("Invalid number!");
+            int newValue = inputPosInt();
             if (newValue > oldValue) {
                 return newValue;
             }
