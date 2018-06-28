@@ -37,6 +37,7 @@ public class BotPlayer extends Player {
 
         nameIndex = generator.nextInt(nameLinkedList.size());
         name = nameLinkedList.get(nameIndex);
+        nameLinkedList.remove(nameIndex);
     }
 
     //behavior methods
@@ -69,8 +70,11 @@ public class BotPlayer extends Player {
                 botMatchingFaces++;
             }
         }
-        //the computer's guess on how many of the current face the player has
-        int guessMatchingFaces = generator.nextInt(3) + 1;
+        //the computer's guess on how many of the current face all players have
+        int guessMatchingFaces = 0;
+        for(int i = 0; i < Game.playerArrayList.size(); i++) {
+            guessMatchingFaces += generator.nextInt(3) + 1;
+        }
 
         System.out.println("\n" + name.toUpperCase() + "'S TURN");
 
