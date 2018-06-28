@@ -91,7 +91,7 @@ public class Game {
                         }
 
                         //ends round
-                        advanceFirstPlayer();
+                        firstPlayerIndex = roundLoser;
                         advanceCurrentPlayer();
                         round = false;
                         System.out.println();
@@ -110,22 +110,6 @@ public class Game {
         System.out.print(playerArrayList.get(currentPlayerIndex).getName() + " wins!");
     }
 
-    private static void advanceFirstPlayer() {
-        firstPlayerIndex = roundLoser;
-        while (true) {
-            if (playerArrayList.get(firstPlayerIndex) != null) {
-                break;
-            }
-            else {
-                if (firstPlayerIndex < playerArrayList.size() - 1) {
-                    firstPlayerIndex++;
-                }
-                else {
-                    firstPlayerIndex = 0;
-                }
-            }
-        }
-    }
     private static void advanceCurrentPlayer() {
         if (currentPlayerIndex < playerArrayList.size() - 1) {
             currentPlayerIndex++;

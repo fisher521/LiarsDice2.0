@@ -5,11 +5,10 @@ import java.util.*;
  * Inherits Player variables and methods, but is automatic
  *
  * @author Fisher
- * @version 6/29/18
+ * @version 6/28/18
  */
-public class BotPlayer extends Player {
+class BotPlayer extends Player {
     static LinkedList<String> nameLinkedList = new LinkedList<>();
-    private static int nameIndex;
 
     //adds bot names to a list (thanks to Michael for help here)
     static {
@@ -25,7 +24,7 @@ public class BotPlayer extends Player {
         nameLinkedList.add("[BOT] Angela");
         nameLinkedList.add("[BOT] Gavin");
         nameLinkedList.add("[BOT] Michael");
-        nameLinkedList.add("[BOT] Jennifer");
+        nameLinkedList.add("[BOT] Jenni");
         nameLinkedList.add("[BOT] Sneha");
         nameLinkedList.add("[BOT] Nalin");
         nameLinkedList.add("[BOT] Edward");
@@ -36,7 +35,7 @@ public class BotPlayer extends Player {
     public BotPlayer() {
         super("");
 
-        nameIndex = generator.nextInt(nameLinkedList.size());
+        int nameIndex = generator.nextInt(nameLinkedList.size());
         name = nameLinkedList.get(nameIndex);
         nameLinkedList.remove(nameIndex);
     }
@@ -44,6 +43,7 @@ public class BotPlayer extends Player {
     //behavior methods
     @Override
     void firstTurn() {
+        //bids a random quantity of its most common face
         int mostCommonFace = 1;
         int mostCommonFaceQuantity = 0;
         int matchingFaces;
@@ -73,27 +73,28 @@ public class BotPlayer extends Player {
         }
         //the computer's guess on how many of the current face all players have
         int guessMatchingFaces = 0;
-        for(int i = 0; i < Game.playerArrayList.size(); i++) {
-            guessMatchingFaces += generator.nextInt(3) + 1;
+        int totalNumberOfDice = 0;
+        for(int i = 0; i < (Game.playerArrayList.size() - 1); i++) {
+            guessMatchingFaces += generator.nextInt(2) + 1;
+            totalNumberOfDice += Game.playerArrayList.get(i).getNumberOfDice();
         }
 
         System.out.println("\n" + name.toUpperCase() + "'S TURN");
 
-        if (Game.quantity > botMatchingFaces + guessMatchingFaces || Game.faceValue > 6 || Game.quantity > botMatchingFaces + Game.lastPlayer.getNumberOfDice()) {
+        if (Game.quantity > botMatchingFaces + guessMatchingFaces || Game.faceValue > 6 || Game.quantity > botMatchingFaces + totalNumberOfDice) {
             return "c";
         }
         else {
             return "b";
         }
     }
-
     @Override
     void bid() {
 
         //checks if the bot has the same quantity of a higher face value
         int face;
         int botHigherMatchingFaces = 0;
-        for (face = Game.faceValue + 1; face <= 6; face++) {
+        for (face = Game.faceValue + 1; face < 6; face++) {
              for (int j = 0; j < numberOfDice; j++) {
                 if (rolls[j] == face) {
                     botHigherMatchingFaces++;
@@ -110,7 +111,6 @@ public class BotPlayer extends Player {
             Game.quantity++;
         }
     }
-
     @Override
     int challenge () {
         //prints dice rolls for all players
@@ -130,7 +130,7 @@ public class BotPlayer extends Player {
                 }
             }
         }
-        System.out.println("\nMatching faces: " + matchingFaces);
+        System.out.println("\n\nMatching faces: " + matchingFaces);
 
         //returns index of the loser of the challenge (Thanks to Dan I for help with this part)
         if (matchingFaces >= Game.quantity) {
