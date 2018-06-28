@@ -4,17 +4,17 @@ import java.util.Scanner;
  * Player Class
  *
  * @author Fisher
- * @version 6/19/18
+ * @version 6/28/18
  */
 public class Player {
-    protected static Random generator = new Random();
+    static Random generator = new Random();
     private static Scanner reader = new Scanner(System.in);
 
-    protected String name;
-    protected int numberOfDice;
-    protected int [] rolls;
+    String name;
+    int numberOfDice;
+    int [] rolls;
 
-    public Player(String name) {
+    Player(String name) {
         if (name.equals("")) {
             this.name = "???";
         }
@@ -67,7 +67,13 @@ public class Player {
             }
         }
     }
+    void firstTurn() {
+        System.out.println("Bid a quantity and face value.\nQuantity: ");
+        Game.quantity = UtilityMethods.inputPosInt();
+        System.out.println("Face Value: ");
+        Game.faceValue = UtilityMethods.inputPosInt();
 
+    }
     String turn() {
         String decision;
 
@@ -76,11 +82,8 @@ public class Player {
             System.out.println("Would you like to make a higher bid or challenge the current bid? (b/c)");
             decision = reader.nextLine();
 
-            if (decision.equals("c")) {
+            if (decision.equals("c") || decision.equals("b")) {
                 return decision;
-            }
-            else if (decision.equals("b")) {
-
             }
         }
     }
@@ -116,7 +119,7 @@ public class Player {
                 }
             }
         }
-        System.out.println("\nMatching faces: " + matchingFaces);
+        System.out.println("\n\nMatching faces: " + matchingFaces);
 
         //returns index of the loser of the challenge
         if (matchingFaces >= Game.quantity) {

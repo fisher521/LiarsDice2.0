@@ -3,7 +3,7 @@ import java.util.Scanner;
  * Liars Dice Main Menu
  *
  * @author Fisher
- * @version 6/19/18
+ * @version 6/28/18
  */
 public class Menu {
     public static void main (String [] args) {
@@ -40,7 +40,7 @@ public class Menu {
                     System.out.println("If the player challenges the previous bid, all players reveal their dice. " +
                             "\nIf the bid is matched or exceeded, the challenger loses a die. Otherwise, the bidder loses a die.");
                     System.out.println("A new round then starts.");
-                    //System.out.println ("The loser of the previous round begins the next round. ");
+                    System.out.println ("The loser of the previous round begins the next round. ");
                     //System.out.println ("In the event that the game comes down to two players with only a single dice each, bids are then made on the sum of both dice instead the quantity of faces rolled.")
                     System.out.println("This is repeated until only one player has dice left. That player is the winner.");
                     break;
@@ -48,6 +48,7 @@ public class Menu {
                     System.out.println("About: ");
                     System.out.println("Created by Fisher Sun");
                     System.out.println("Credits to dicegamedepot.com for the rules");
+                    System.out.println("Special Thanks to Michael, Dan, and Mrs. DiBenedetto for all the help");
                     break;
                 case "5":
                     System.out.println("See you another time!");

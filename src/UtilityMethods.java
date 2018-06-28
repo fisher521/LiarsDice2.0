@@ -5,7 +5,7 @@ import java.util.Scanner;
  * Methods to assist in making programs fool-proof.
  *
  * @author Fisher
- * @version 6/19/18
+ * @version 6/28/18
  */
 public class UtilityMethods {
     private static Scanner reader = new Scanner(System.in);
