@@ -11,6 +11,7 @@ public class BotPlayer extends Player {
     static LinkedList<String> nameLinkedList = new LinkedList<>();
     private static int nameIndex;
 
+    //adds bot names to a list (thanks to Michael for help here)
     static {
         nameLinkedList.add("[BOT] Forrest");
         nameLinkedList.add("[BOT] Samantha");
@@ -131,7 +132,7 @@ public class BotPlayer extends Player {
         }
         System.out.println("\nMatching faces: " + matchingFaces);
 
-        //returns index of the loser of the challenge (Thanks to Dan I for the help with this part)
+        //returns index of the loser of the challenge (Thanks to Dan I for help with this part)
         if (matchingFaces >= Game.quantity) {
             return Game.playerArrayList.indexOf(this);
         } else {

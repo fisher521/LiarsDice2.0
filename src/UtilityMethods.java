@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class UtilityMethods {
     private static Scanner reader = new Scanner(System.in);
 
+    //Thanks to Jonathan for teaching me how to use try-catch statements
     public static int inputPosInt() {
         int integer;
         while (true) {

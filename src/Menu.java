@@ -44,7 +44,7 @@ public class Menu {
                     System.out.println("About: ");
                     System.out.println("Created by Fisher Sun");
                     System.out.println("Credits to dicegamedepot.com for the rules");
-                    System.out.println("Special Thanks to Michael, Dan, and Mrs. DiBenedetto for all the help");
+                    System.out.println("Special Thanks to Michael, Dan, Jonathan, and Mrs. DiBenedetto for all the help (this could not be done without you all)");
                     break;
                 case "4":
                     System.out.println("See you another time!");

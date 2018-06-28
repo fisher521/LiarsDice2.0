@@ -17,7 +17,7 @@ public class Game {
     public static void main (String [] args) {
         Scanner reader = new Scanner(System.in);
 
-        //Creates an arrayList of Player objects
+        //Creates an arrayList of Player objects (thanks to Michael for help with lists)
         System.out.println("How many human players will be playing?");
         int playerCount = UtilityMethods.inputPosInt();
 
